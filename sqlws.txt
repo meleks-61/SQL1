@@ -1,0 +1,232 @@
+1)--SELECT ALL COLUMNS FROM TRACKS TABLE
+SELECT*
+FROM tracks
+
+
+2)--SELECT ONLY FOLLOWING COLUMNS FROM TRACKS TABLE: Name,Composer,UnitPrice
+SELECT Name, Composer, UnitPrice
+FROM tracks
+
+3)--HOW MANY RECORDS ARE THERE IN TRACKS TABLE?
+SELECT COUNT(*)--NULL DEĞERLERİ DE SAYAR
+FROM tracks
+
+SELECT  COUNT(TrackId)
+FROM tracks
+
+4)--HOW MANY RECORDS ARE THERE IN ARTISTS TABLE?
+SELECT*
+FROM artists
+
+SELECT COUNT(*)
+FROM artists
+
+SELECT COUNT(ArtistId)
+FROM artists
+
+5)--HOW MANY DIFFERENT/DISTINCT PRICES ARE THERE IN TRACKS TABLE
+SELECT COUNT(DISTINCT UnitPrice)
+FROM tracks
+
+6)--WHAT IS THE TITLE OF THE ALBUM WITH ALBUMID=3
+SELECT Title
+FROM albums
+WHERE AlbumId = 3
+
+7)--What is the ArtistID of Metallica?
+SELECT ArtistId
+FROM artists
+WHERE Name = 'Metallica'
+
+8)--How many albums does Metallica have? List them all
+SELECT*
+FROM artists
+
+SELECT*
+FROM albums
+
+--SELECT*
+--FROM artists ar
+--JOIN albums al ON ar.ArtistId=al.ArtistId)
+
+SELECT AlbumId,Title, COUNT(Title)
+FROM albums
+WHERE ArtistId = (SELECT ArtistId
+FROM artists
+WHERE Name ='Metallica')
+GROUP BY AlbumId,Title
+
+9)--Albums has different tracks in it. How many tracks does Metallica's "Master Of Puppets" album has? List all columns.
+--(We have found that "Master Of Puppets" album has AlbumId=152)
+
+SELECT Name, COUNT(Name)
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets')
+GROUP BY Name
+--------------------------------------
+
+SELECT name, COUNT(name)
+FROM tracks
+WHERE AlbumId =152
+GROUP BY name
+
+10)--List all the tracks IDs and Names in Metallica's following albums 
+SELECT TrackId,name
+FROM tracks
+----------------------------------------------------------
+
+SELECT ar.Name,ar.ArtistId,al.AlbumId,al.Title
+FROM albums al
+JOIN artists ar ON  al.ArtistId =ar.ArtistId
+----------------------------------------------------
+SELECT TrackId,name
+FROM tracks
+WHERE AlbumId IN (SELECT AlbumId
+FROM albums
+WHERE ArtistId =(SELECT ArtistId
+FROM artists
+WHERE Name = 'Metallica'))
+
+11)--Order the results of tracks in "Master Of Puppets" album A-Z according to column "Name"
+
+SELECT Name
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets')
+ORDER BY Name ASC
+
+12)--Bring the TrackId and Name of tracks in  "Master Of Puppets" album with TrackID between 1854 and 1858
+SELECT Name,TrackId
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets') AND TrackId>=1854 AND TrackId<=1858
+
+----------------------------------------------------------------------
+13)--Bring the record with Minimum-Size in Bytes from tracks in  "Master Of Puppets" album 
+
+SELECT name,MIN(Bytes)
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets')
+
+-----------------------------------------------------
+14)--Bring the record with Maximum-Size in Bytes from tracks in  "Master Of Puppets" album 
+
+SELECT name,MAX(Bytes)
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets')
+-----------------------------------------------------
+
+SELECT name,Bytes
+FROM tracks
+WHERE AlbumId=(SELECT AlbumId
+FROM albums
+WHERE Title = 'Master Of Puppets')
+ORDER BY Bytes
+------------------------------------------------------------
+15)--Bring all records from tracks table and present every AlbumID and the max size-bytes track on it.
+
+SELECT *
+FROM tracks
+
+------------------------------------
+
+SELECT AlbumId ,Max (Bytes)
+FROM tracks
+GROUP BY AlbumId
+-----------------------------------------
+SELECT Name,Bytes
+FROM tracks
+WHERE AlbumId = 1
+ORDER BY Bytes DESC
+
+16)--Bring all records from tracks table and present every AlbumID and the min size-bytes track on it.
+
+SELECT AlbumId ,MIN (Bytes)
+FROM tracks
+GROUP BY AlbumId
+--------------------------------------
+
+SELECT Name,Bytes
+FROM tracks
+WHERE AlbumId = 1
+ORDER BY Bytes ASC
+
+17)--What is the sum of all tracks cost
+
+SELECT SUM(Unitprice)
+FROM tracks
+
+18)--What is the avg price of all tracks cost?
+
+SELECT AVG(Unitprice)
+FROM tracks
+
+19)--What is the sum of each albums cost? 
+
+SELECT AlbumId,SUM(UnitPrice)
+FROM tracks
+GROUP BY AlbumId
+
+20)--What is the avarage size of tracks in each album? 
+
+SELECT AlbumId, AVG(Bytes)
+FROM tracks
+GROUP BY AlbumId
+
+21)--How many tracks have each album?
+
+SELECT AlbumId,COUNT(TrackId) 
+FROM tracks
+GROUP BY AlbumId
+
+22)--What is the AlbumID of the album with most track in it
+
+SELECT AlbumId, MAX(C)
+FROM(SELECT AlbumId,COUNT(TrackId) AS C
+FROM tracks
+GROUP BY AlbumId)
+
+23)--At the beginning of the lesson, we have used the queries below:
+
+--SELECT * FROM artists WHERE NAME = 'Metallica' (We have found that Metallica has ArtistID=50)
+
+--SELECT * FROM albums WHERE ArtistId = 50	(We have found the 10 albums of Metallica with ArtistID=50)
+
+--AlbumId	Title					ArtistId
+--35		Garage Inc. (Disc 1)		50
+--148		Black Album			50
+--149		Garage Inc. (Disc 2)		50
+--150		Kill 'Em All			50
+--151		Load				50
+--152		Master Of Puppets		50
+--153		ReLoad				50
+--154		Ride The Lightning		50
+--155		St. Anger			50
+--156		...And Justice For All	50
+
+--Let's find all the tracks of Metallica
+
+SELECT *
+FROM tracks
+WHERE AlbumId IN (SELECT AlbumId
+FROM albums 
+WHERE ArtistId =(SELECT ArtistId
+FROM artists
+WHERE Name= 'Metallica'))
+GROUP BY AlbumId,Name
+
+24)--How many tracks has Metallica sold to each country?
+??
+
+
+
+
+
